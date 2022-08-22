@@ -40,7 +40,20 @@ exports.up = function up(knex) {
         }
     });
 
-    return Promise.all([userTable, roomTable, messageTable]);
+    return Promise
+        .all([userTable, roomTable, messageTable])
+        .then(() => {
+            return knex('Room')
+            .whereNotExists(() => {
+                knex('Room').where({
+                    id: 1,
+                    name: 'lobby'
+                });
+            })
+            .insert({
+                    name: 'lobby'
+                });
+        });;
 };
 
 /**
