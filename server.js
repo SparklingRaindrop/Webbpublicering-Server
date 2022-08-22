@@ -10,7 +10,7 @@ const httpServer = createServer(app);
 
 const options = {
     cors: {
-        origin: ['http://localhost:3000/chat', 'http://localhost:3000'],
+        origin: ['https://cme-tsubasa-frontend.herokuapp.com/'],
         method: ['GET', 'POST']
     }
 };
