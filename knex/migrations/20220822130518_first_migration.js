@@ -8,7 +8,7 @@ exports.up = function up(knex) {
             return knex.schema.createTable('User', function(table) {
                 table.string('id').primary();
                 table.string('name').notNullable();
-                table.string('current_room_id').notNullable();
+                table.integer('current_room_id').notNullable();
                 table.foreign('current_room_id').references('Room.id');
             })
         }
