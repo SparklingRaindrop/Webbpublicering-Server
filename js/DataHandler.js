@@ -1,6 +1,5 @@
 //const db = require('../config/database');
 const knex = require('../knex/knex.js');
-const db = require('../knex/knex.js');
 
 class DataHandler {
     /* User */
