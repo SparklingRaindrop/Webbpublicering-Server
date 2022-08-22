@@ -58,7 +58,7 @@ class EventHandler {
                     message: 'Something happened on the server.',
                 };
             });
- 
+
         await this.handleJoinRoom(socket, {
             name: 'lobby'
         }, {type: 'init'});

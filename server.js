@@ -14,6 +14,7 @@ const options = {
         method: ['GET', 'POST']
     }
 };
+const PORT = process.env.PORT || 5000;
 
 const io = new Server(httpServer, options);
 const eventHandler = new EventHandler(io);
@@ -74,5 +75,5 @@ io.on('connection', (socket) => {
     });
 });
 
-httpServer.listen(process.env.PORT);
-console.log('\x1b[42m%s\x1b[0m', `Server is running on ${process.env.PORT}`);
+httpServer.listen(PORT);
+console.log('\x1b[42m%s\x1b[0m', `Server is running on ${PORT}`);
