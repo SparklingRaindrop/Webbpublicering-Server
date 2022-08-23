@@ -5,11 +5,6 @@ const { Server } = require('socket.io');
 const {logHandler} = require('./js/LogHandler');
 const EventHandler = require('./js/EventHandler');
 
-const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, options);
-const eventHandler = new EventHandler(io);
-
 const options = {
     cors: {
         origin: ['https://cme-tsubasa-frontend.herokuapp.com/'],
@@ -17,6 +12,11 @@ const options = {
     }
 };
 const PORT = process.env.PORT || 5000;
+
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, options);
+const eventHandler = new EventHandler(io);
 
 app.get('/', (req, res) => {
     res.send('GET request to the homepage')
