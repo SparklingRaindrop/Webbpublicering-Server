@@ -59,7 +59,7 @@ class DataHandler {
 
     // Pass either {id: id} or {name: name}
     getRoomBy(params) {
-        return knex('Room').select('*').first().where(params);
+        return knex('Room').select('*').where(params).first();
     }
 
     getAllRoom() {
@@ -93,30 +93,6 @@ class DataHandler {
         return knex('Message').select('*').where(params);
     }
 
-
-
-    // TODO DELETE later
-    generateParams(newDataObj) {
-        const targets = Object.keys(newDataObj).reduce((result, key) => {
-            if (newDataObj[key] !== undefined) {
-                result += `${result !== '' ? ', ' : ''}${key} = $${key}`;
-            }
-            return result;
-        }, '');
-    
-        const parameters = {...newDataObj};
-        for (const property in newDataObj) {
-            if (newDataObj[property]) {
-                parameters[`$${property}`] = newDataObj[property];
-            }
-            delete parameters[property];
-        }
-    
-        return {
-            targets,
-            parameters
-        };
-    }
 }
 
 
