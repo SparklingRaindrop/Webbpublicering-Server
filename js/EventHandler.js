@@ -70,8 +70,9 @@ class EventHandler {
         const roomList = await this.getRoomList();
         //const messages = await this.dh.getMessagesBy({room_id: lobby.id});
         // Sending initial value to the user
+        // knex returns an array
         socket.emit('user:initialized', {
-            user: newUser,
+            user: newUser[0],
             roomList: roomList,
         });
 
