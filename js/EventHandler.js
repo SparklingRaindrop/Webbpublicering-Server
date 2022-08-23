@@ -233,7 +233,7 @@ class EventHandler {
                 };
             });
         const newRoomList = await this.getRoomList();
-        console.log('roomList', newRoomList);
+
         this.notifyAll('room:new_list', newRoomList);
         socket.to(destination.name).emit('room:new_member', newTargetUser);
 
@@ -492,6 +492,8 @@ class EventHandler {
         if (roomList.filter(room => room.name === roomName).length === 0) {
             if(password !== '') {
                 newRoom.password = md5(newRoom.password);
+            } else {
+                newRoom.password = NULL;
             }
             await this.dh.createNewRoom(newRoom)
                 .catch(error => {
