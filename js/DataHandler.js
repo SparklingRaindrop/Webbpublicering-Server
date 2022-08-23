@@ -78,11 +78,9 @@ class DataHandler {
 
     /* Message */
     addMessage(newMessage) {
-        const hasReceiver = newMessage.receiver !== undefined;
-
         return knex('Message').insert({
             ...newMessage,
-            receiver: hasReceiver ? receiver : '',
+            receiver: newMessage.receiver || '',
         });
     }
 
