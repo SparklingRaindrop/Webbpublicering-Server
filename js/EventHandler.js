@@ -211,7 +211,7 @@ class EventHandler {
 
         socket.join(destination.name);
         const messages = await this.dh.getMessagesBy({room_id: destination.id});
-
+        console.log('test', messages);
         socket.emit('user:new_room_entered', {
             message: {
                 room_name: destination.name,
