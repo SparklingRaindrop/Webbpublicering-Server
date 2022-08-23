@@ -130,7 +130,7 @@ class EventHandler {
                     message: 'Something happened on the server.',
                 };
             });
-        console.log("test", targetUser, socket.id);
+
         const origin = await this.dh.getRoomBy({id: targetUser.current_room_id})
             .catch(error => {
                 const details = {
@@ -199,7 +199,7 @@ class EventHandler {
                 };
             });
 
-        console.log('\x1b[34m%s\x1b[0m', `ID: ${socket.id} entered the room "${destination.name}"`);
+        console.log(`ID: ${socket.id} entered the room "${destination.name}"`);
         
         if (!option || option.type !== 'init') {
             socket.leave(origin.name);
@@ -210,6 +210,7 @@ class EventHandler {
 
         socket.join(destination.name);
         const messages = await this.dh.getMessagesBy({room_id: destination.id});
+        console.log('messages', messages);
         socket.emit('user:new_room_entered', {
             message: {
                 room_name: destination.name,
@@ -623,7 +624,7 @@ class EventHandler {
                 };
             });
 
-        console.log('\x1b[34m%s\x1b[0m', `ID: ${socket.id} deleted a room "${data.name}"`);
+        console.log(`ID: ${socket.id} deleted a room "${data.name}"`);
 
         const newRoomList = await this.getRoomList()
             .catch(error => {
