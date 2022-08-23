@@ -7,6 +7,8 @@ const EventHandler = require('./js/EventHandler');
 
 const app = express();
 const httpServer = createServer(app);
+const io = new Server(httpServer, options);
+const eventHandler = new EventHandler(io);
 
 const options = {
     cors: {
@@ -16,8 +18,9 @@ const options = {
 };
 const PORT = process.env.PORT || 5000;
 
-const io = new Server(httpServer, options);
-const eventHandler = new EventHandler(io);
+app.get('/', (req, res) => {
+    res.send('GET request to the homepage')
+});
 
 io.use((socket, next) => {
     console.log("\x1b[34m%s\x1b[0m", `ID: ${socket.id} is connected.`);
