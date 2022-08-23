@@ -14,16 +14,25 @@ class EventHandler {
     /// User ///
     async handleReady(socket, userName) {
         const lobby = await this.dh.getRoomBy({name: 'lobby'})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getRoomBy"
+                }
+                write(details, socket.id, {type: 'error'});
+
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
                 };
             });
         const allMembers = await this.dh.getAllUsers()
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getAllUsers"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -50,7 +59,6 @@ class EventHandler {
             id: socket.id,
             name: userName,
             current_room_id: lobby.id,
-            current_room: 'lobby'
         })
             .catch(error => {
                 const details = {
@@ -73,14 +81,21 @@ class EventHandler {
         // Sending initial value to the user
         // knex returns an array
         socket.emit('user:initialized', {
-            user: newUser,
+            user: {
+                ...newUser,
+                current_room: 'lobby'
+            },
             roomList: roomList,
         });
 
         // Share new data with the other users
         const userList = await this.dh.getAllUsers()
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getAllUsers"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -104,8 +119,12 @@ class EventHandler {
     */
     async handleJoinRoom(socket, data, option) {
         const targetUser = await this.dh.getUserBy({id: socket.id})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getUserBy"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -113,16 +132,26 @@ class EventHandler {
             });
         console.log("test", targetUser, socket.id);
         const origin = await this.dh.getRoomBy({id: targetUser.current_room_id})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getRoomBy"
+                }
+                write(details, socket.id, {type: 'error'});
+
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
                 };
             });
         const destination = await this.dh.getRoomBy({name: data.name})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getRoomBy"
+                }
+                write(details, socket.id, {type: 'error'});
+        
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -157,8 +186,13 @@ class EventHandler {
             id: socket.id,
             newRoomId: destination.id
         })
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "moveRoom"
+                }
+                write(details, socket.id, {type: 'error'});
+        
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -184,8 +218,13 @@ class EventHandler {
         });
 
         const newTargetUser = await this.dh.getUserBy({id: socket.id})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getUserBy"
+                }
+                write(details, socket.id, {type: 'error'});
+        
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -208,12 +247,12 @@ class EventHandler {
     */
     async handleTypingStart(socket, data) {
         const typingBy = await this.dh.getUserBy({id: socket.id})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
-                return {
-                    status: 500,
-                    message: 'Something happened on the server.',
-                };
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getUserBy"
+                }
+                write(details, socket.id, {type: 'error'});
             });
 
         const notification = {
@@ -247,20 +286,33 @@ class EventHandler {
 
     async handleDisconnect(userName) {
         const targetUser = await this.dh.getUserBy({name: userName})
-            .catch(reason => {
-                write(reason, undefined, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "handleDisconnect"
+                }
+                write(details, undefined, {type: 'error'});
             });
+            
         if (userName && targetUser) {
             await this.dh.removeUserBy({name: userName})
-            .catch(reason => {
-                write(reason, targetUser.id, {type: 'error'});
-            });
+                .catch(error => {
+                    const details = {
+                        error: error.message,
+                        function: "removeUserBy"
+                    }
+                    write(details, socket.id, {type: 'error'});
+                });
         }
         
         const roomList = await this.getRoomList();
         const allMembers = await this.dh.getAllUsers()
-            .catch(reason => {
-                write(reason, targetUser.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getRoomList"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -305,8 +357,12 @@ class EventHandler {
 
         const { content, receiver } = data;
         const sender = await this.dh.getUserBy({id: socket.id})
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getUserBy"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -332,8 +388,12 @@ class EventHandler {
             newMessage.room_id = sender.current_room_id;
         } else {
             const receiverData = await this.dh.getUserBy({id: receiver})
-                .catch(reason => {
-                    write(reason, socket.id, {type: 'error'});
+                .catch(error => {
+                    const details = {
+                        error: error.message,
+                        function: "getUserBy"
+                    }
+                    write(details, socket.id, {type: 'error'});
                     return {
                         status: 500,
                         message: 'Something happened on the server.',
@@ -348,8 +408,12 @@ class EventHandler {
             newMessage.receiver= receiverData.id;
         }
         await this.dh.addMessage(newMessage)
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "addMessage"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -367,8 +431,12 @@ class EventHandler {
             const room = await this.dh.getRoomBy({
                 id: sender.current_room_id
             })
-                .catch(reason => {
-                    write(reason, socket.id, {type: 'error'});
+                .catch(error => {
+                    const details = {
+                        error: error.message,
+                        function: "getRoomBy"
+                    }
+                    write(details, socket.id, {type: 'error'});
                     return {
                         status: 500,
                         message: 'Something happened on the server.',
@@ -408,8 +476,12 @@ class EventHandler {
         }
 
         const roomList = await this.dh.getAllRoom()
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getAllRoom"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -420,8 +492,12 @@ class EventHandler {
                 newRoom.password = md5(newRoom.password);
             }
             await this.dh.createNewRoom(newRoom)
-                .catch(reason => {
-                    write(reason, socket.id, {type: 'error'});
+                .catch(error => {
+                    const details = {
+                        error: error.message,
+                        function: "createNewRoom"
+                    }
+                    write(details, socket.id, {type: 'error'});
                     return {
                         status: 500,
                         message: 'Something happened on the server.',
@@ -431,8 +507,12 @@ class EventHandler {
             console.log('\x1b[34m%s\x1b[0m', `ID: ${socket.id} created a new room "${roomName}"`);
 
             const roomList = await this.getRoomList()
-                .catch(reason => {
-                    write(reason, socket.id, {type: 'error'});
+                .catch(error => {
+                    const details = {
+                        error: error.message,
+                        function: "getRoomList"
+                    }
+                    write(details, socket.id, {type: 'error'});
                     return {
                         status: 500,
                         message: 'Something happened on the server.',
@@ -475,8 +555,12 @@ class EventHandler {
         const targetRoom = await this.dh.getRoomBy({
             name: data.name
         })
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getRoomBy"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -490,8 +574,12 @@ class EventHandler {
         }
 
         const members = await this.dh.getMembersByRoomId(targetRoom.id)
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getMembersByRoomId"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -523,8 +611,12 @@ class EventHandler {
         }
 
         await this.dh.removeRoomById(targetRoom.id)
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "removeRoomById"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -534,8 +626,12 @@ class EventHandler {
         console.log('\x1b[34m%s\x1b[0m', `ID: ${socket.id} deleted a room "${data.name}"`);
 
         const newRoomList = await this.getRoomList()
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getRoomList"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -551,8 +647,13 @@ class EventHandler {
 
     async getRoomList() {
         const rooms = await this.dh.getAllRoom()
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "getAllRoom"
+                }
+                write(details, socket.id, {type: 'error'});
+
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -561,12 +662,16 @@ class EventHandler {
         const result = await Promise.all(
             rooms.map(async room => {
                 const members = await this.dh.getMembersByRoomId(room.id)
-                    .catch(reason => {
-                        write(reason, socket.id, {type: 'error'});
-                        return {
-                            status: 500,
-                            message: 'Something happened on the server.',
-                        };
+                    .catch(error => {
+                        const details = {
+                            error: error.message,
+                            function: "getMembersByRoomId"
+                        }
+                        write(details, socket.id, {type: 'error'});
+                            return {
+                                status: 500,
+                                message: 'Something happened on the server.',
+                            };
                     });
                 return {
                 roomName: room.name,
