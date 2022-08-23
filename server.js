@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 io.use((socket, next) => {
-    console.log("\x1b[34m%s\x1b[0m", `ID: ${socket.id} is connected.`);
+    console.log(`ID: ${socket.id} is connected.`);
     next();
 });
 
@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
 
     socket.on('user:ready', async ({userName}, callback) => {
         // Check if userName is not empty
-        console.log('\x1b[34m%s\x1b[0m', `ID: ${socket.id} set username as ${userName}.`);
+        console.log(`ID: ${socket.id} set username as ${userName}.`);
         // This is used in disconnect.
         socket.userName = userName;
 
@@ -81,4 +81,4 @@ io.on('connection', (socket) => {
 });
 
 httpServer.listen(PORT);
-console.log('\x1b[42m%s\x1b[0m', `Server is running on ${PORT}`);
+console.log(`Server is running on ${PORT}`);
