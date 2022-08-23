@@ -381,7 +381,7 @@ class EventHandler {
             sender: socket.id,
             sender_name: sender.name,
             content: content,
-            timestamp: new Date().toString(),
+            //TODO timestamp: new Date().toString(),
         };
 
         // When receiver is not provided, it's sent to the room
