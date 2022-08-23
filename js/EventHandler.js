@@ -493,7 +493,7 @@ class EventHandler {
             if(password !== '') {
                 newRoom.password = md5(newRoom.password);
             } else {
-                newRoom.password = NULL;
+                newRoom.password = null;
             }
             await this.dh.createNewRoom(newRoom)
                 .catch(error => {
