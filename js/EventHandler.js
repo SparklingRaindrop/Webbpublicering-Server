@@ -383,7 +383,6 @@ class EventHandler {
             sender: socket.id,
             sender_name: sender.name,
             content: content,
-            //TODO timestamp: new Date().toString(),
         };
 
         // When receiver is not provided, it's sent to the room
@@ -410,7 +409,7 @@ class EventHandler {
             }
             newMessage.receiver= receiverData.id;
         }
-        await this.dh.addMessage(newMessage)
+        const addedMessage = await this.dh.addMessage(newMessage)
             .catch(error => {
                 const details = {
                     error: error.message,
@@ -444,9 +443,9 @@ class EventHandler {
                         message: 'Something happened on the server.',
                     };
                 });
-            socket.to(room.name).emit('msg:new', newMessage);
+            socket.to(room.name).emit('msg:new', addedMessage);
         } else {
-            this.io.to(receiver).emit('msg:new', newMessage);
+            this.io.to(receiver).emit('msg:new', addedMessage);
         }
 
         return {status: 200};

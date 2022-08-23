@@ -85,7 +85,7 @@ class DataHandler {
         return knex('Message').insert({
             ...newMessage,
             receiver: newMessage.receiver || '',
-        });
+        }, ['content', 'sender', 'sender_name', 'timestamp']);
     }
 
     // params = { room_id or sender & receiver }
