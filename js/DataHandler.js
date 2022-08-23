@@ -1,14 +1,13 @@
-//const db = require('../config/database');
-const db = require('../knex/knex.js');
+const knex = require('../knex/knex.js');
 
 class DataHandler {
     /* User */
     getAllUsers() {
-        return db.select('*').from('User');
+        return knex.select('*').from('User');
     }
 
     getUserBy(params) {
-        return db
+        return knex
             .select('User.*')
             .select('Room.name')
             .as('current_room')
