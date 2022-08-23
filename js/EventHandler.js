@@ -77,6 +77,7 @@ class EventHandler {
         }, {type: 'init'});
 
         const roomList = await this.getRoomList();
+        console.log('roomList', roomList);
         //const messages = await this.dh.getMessagesBy({room_id: lobby.id});
         // Sending initial value to the user
         // knex returns an array
@@ -414,7 +415,6 @@ class EventHandler {
                     error: error.message,
                     function: "addMessage"
                 }
-                console.log('add messages', error);
                 write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
@@ -423,7 +423,6 @@ class EventHandler {
             });
 
         console.log(
-            '\x1b[35m%s\x1b[0m',
             `ID: ${sender.id} has sent "${content}" ` +
             `to ${receiver ? receiver : `the room ID:[${sender.current_room_id}]` }`
         );
@@ -506,7 +505,7 @@ class EventHandler {
                     };
                 });
 
-            console.log('\x1b[34m%s\x1b[0m', `ID: ${socket.id} created a new room "${roomName}"`);
+            console.log(`ID: ${socket.id} created a new room "${roomName}"`);
 
             const roomList = await this.getRoomList()
                 .catch(error => {
