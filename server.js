@@ -7,10 +7,11 @@ const EventHandler = require('./js/EventHandler');
 
 const options = {
     cors: {
-        origin: ['https://cme-tsubasa-frontend.herokuapp.com/'],
+        origin: ['http://localhost:3000', 'https://cme-tsubasa-frontend.herokuapp.com/'],
         method: ['GET', 'POST']
     }
 };
+
 const PORT = process.env.PORT || 5000;
 
 const app = express();
