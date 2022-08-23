@@ -111,7 +111,7 @@ class EventHandler {
                     message: 'Something happened on the server.',
                 };
             });
-        console.log("test", targetUser);
+        console.log("test", targetUser, socket.id);
         const origin = await this.dh.getRoomBy({id: targetUser.current_room_id})
             .catch(reason => {
                 write(reason, socket.id, {type: 'error'});
