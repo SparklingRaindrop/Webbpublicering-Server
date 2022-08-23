@@ -51,8 +51,12 @@ class EventHandler {
             name: userName,
             current_room_id: lobby.id
         })
-            .catch(reason => {
-                write(reason, socket.id, {type: 'error'});
+            .catch(error => {
+                const details = {
+                    error: error.message,
+                    function: "addNewUser"
+                }
+                write(details, socket.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',

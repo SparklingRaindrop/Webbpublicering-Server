@@ -7,6 +7,8 @@ class DataHandler {
     }
 
     getUserBy(params) {
+        const key = Object.keys(params)[0];
+        const value = Object.values(params)[0];
         return knex
             .select('User.*')
             .select('Room.name')
@@ -18,12 +20,12 @@ class DataHandler {
                 '=',
                 'Room.id'
             )
-            .where(params)
+            .where(`User.${key}`, value)
             .first();
     }
 
     async addNewUser(newUser) {
-        return knex('User').insert(newUser).returning('*');
+        return knex('User').insert(newUser, ['id', 'name', 'current_room_id']);
     }
 
     removeUserBy(params) {
