@@ -72,7 +72,7 @@ class EventHandler {
         // Sending initial value to the user
         // knex returns an array
         socket.emit('user:initialized', {
-            user: newUser[0],
+            user: newUser,
             roomList: roomList,
         });
 
