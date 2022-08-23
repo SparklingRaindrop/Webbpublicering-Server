@@ -10,9 +10,7 @@ class DataHandler {
         const key = Object.keys(params)[0];
         const value = Object.values(params)[0];
         return knex
-            .select('User.*')
-            .select('Room.name')
-            .as('current_room')
+            .select('User.*', 'Room.name AS current_room')
             .from('User')
             .innerJoin(
                 'Room',
