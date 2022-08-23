@@ -59,7 +59,7 @@ function write(data, id, option) {
             fs.writeFile('./logs/system.log', data, {flag: 'a'});
         }
     } catch (err) {
-        console.error('\x1b[43m%s\x1b[0m', err);
+        console.error(err);
     }
 }
 
