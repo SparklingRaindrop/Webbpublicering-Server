@@ -49,7 +49,8 @@ class EventHandler {
         const newUser = await this.dh.addNewUser({
             id: socket.id,
             name: userName,
-            current_room_id: lobby.id
+            current_room_id: lobby.id,
+            current_room: 'lobby'
         })
             .catch(error => {
                 const details = {
