@@ -12,7 +12,7 @@ class DataHandler {
         return knex
             .select('*')
             .from('User')
-            .where(`User.${key}`, value)
+            .where(`${key}`, value)
             .first();
     }
 
