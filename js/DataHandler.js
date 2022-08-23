@@ -64,7 +64,7 @@ class DataHandler {
         return knex.select(
             'id',
             'name',
-            knex.raw('CASE WHEN password IS NULL THEN  0 ELSE 1 END AS password')
+            knex.raw('CASE WHEN password IS NULL THEN 0 ELSE 1 END AS password')
             ).from('Room');
     }
 
