@@ -10,9 +10,15 @@ class DataHandler {
         const key = Object.keys(params)[0];
         const value = Object.values(params)[0];
         return knex
-            .select('*')
+            .select('User.*', 'Room.name AS current_room')
             .from('User')
-            .where(`${key}`, value)
+            .innerJoin(
+                'Room',
+                'User.current_room_id',
+                '=',
+                'Room.id'
+            )
+            .where(`User.${key}`, value)
             .first();
     }
 
