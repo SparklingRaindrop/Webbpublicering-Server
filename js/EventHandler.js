@@ -77,7 +77,7 @@ class EventHandler {
         }, {type: 'init'});
 
         const roomList = await this.getRoomList();
-        console.log('roomList', roomList);
+
         //const messages = await this.dh.getMessagesBy({room_id: lobby.id});
         // Sending initial value to the user
         // knex returns an array
@@ -233,6 +233,7 @@ class EventHandler {
                 };
             });
         const newRoomList = await this.getRoomList();
+        console.log('roomList', newRoomList);
         this.notifyAll('room:new_list', newRoomList);
         socket.to(destination.name).emit('room:new_member', newTargetUser);
 
