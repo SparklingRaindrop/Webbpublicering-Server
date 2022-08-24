@@ -21,7 +21,7 @@ const io = new Server(httpServer, options);
 const eventHandler = new EventHandler(io);
 
 app.get('/', (req, res) => {
-    res.send('GET request to the homepage')
+    res.send('Chill, yo! The server is running...')
 });
 
 io.use((socket, next) => {
