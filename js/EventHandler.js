@@ -263,7 +263,7 @@ class EventHandler {
             ...data,
         };
 
-        if (data.hasOwnProperty('receiver')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'receiver')) {
             socket.to(data.receiver).emit('user:typing_started', notification);
             return {
                 status : 200
@@ -277,7 +277,7 @@ class EventHandler {
     }
     
     async handleTypingStop(socket, data) {
-        if (data.hasOwnProperty('receiver')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'receiver')) {
             socket.to(data.receiver).emit('user:typing_stopped');
         }
         socket.to(data.room_name).emit('user:typing_stopped');
@@ -304,7 +304,7 @@ class EventHandler {
                         error: error.message,
                         function: "removeUserBy"
                     }
-                    write(details, socket.id, {type: 'error'});
+                    write(details, targetUser.id, {type: 'error'});
                 });
         }
         
@@ -315,7 +315,7 @@ class EventHandler {
                     error: error.message,
                     function: "getRoomList"
                 }
-                write(details, socket.id, {type: 'error'});
+                write(details, targetUser.id, {type: 'error'});
                 return {
                     status: 500,
                     message: 'Something happened on the server.',
@@ -655,7 +655,7 @@ class EventHandler {
                     error: error.message,
                     function: "getAllRoom"
                 }
-                write(details, socket.id, {type: 'error'});
+                write(details, null, {type: 'error'});
 
                 return {
                     status: 500,
@@ -670,7 +670,7 @@ class EventHandler {
                             error: error.message,
                             function: "getMembersByRoomId"
                         }
-                        write(details, socket.id, {type: 'error'});
+                        write(details, null, {type: 'error'});
                             return {
                                 status: 500,
                                 message: 'Something happened on the server.',
