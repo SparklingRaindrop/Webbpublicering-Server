@@ -1,0 +1,22 @@
+name: Chat backend CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Set upp Node v16 in our workflow"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: "npm install"
+      - run: "npx eslint js/*.js server.js"
