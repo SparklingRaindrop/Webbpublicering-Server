@@ -53,7 +53,7 @@ exports.up = function up(knex) {
             .insert({
                     name: 'lobby'
                 });
-        });;
+        });
 };
 
 /**
