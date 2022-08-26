@@ -20,10 +20,6 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, options);
 const eventHandler = new EventHandler(io);
 
-app.get('/', (req, res) => {
-    res.send('Chill, yo! The server is running...')
-});
-
 io.use((socket, next) => {
     console.log(`ID: ${socket.id} is connected.`);
     next();
